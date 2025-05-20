@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         inputHorizontal = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector2(inputHorizontal * velocidadMovimiento, rb.velocity.y);
+        rb.linearVelocity = new Vector2(inputHorizontal * velocidadMovimiento, rb.linearVelocity.y);
         if (Input.GetKeyDown(KeyCode.Space))
         {
             rb.AddForce(Vector2.up * fuerzaSalto, ForceMode2D.Impulse);
