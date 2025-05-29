@@ -3,20 +3,25 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private Rigidbody2D rb;
-    private float inputHorizontal;
-
     [SerializeField] private float velocidadMovimiento;
-
     [SerializeField] private float fuerzaSalto;
 
-    private Animator animator;
+    [Header("CombatSystem")] [SerializeField]
+    private Transform attackPoint;
+
+    [SerializeField] private float attackRadio;
+    [SerializeField] private float damage;
+    [SerializeField] private LayerMask damageLayer;
+
+    private Animator _animator;
+    private Rigidbody2D _rb;
+    private float _inputHorizontal;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
+        _rb = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per framea
@@ -24,25 +29,33 @@ public class Player : MonoBehaviour
     {
         Motion();
         Jump();
+        Attack();
+    }
+    private void Attack()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            _animator.SetTrigger("attack1");
+        }
     }
 
     private void Jump()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            rb.AddForce(Vector2.up * fuerzaSalto, ForceMode2D.Impulse);
-            animator.SetTrigger("jump");
+            _rb.AddForce(Vector2.up * fuerzaSalto, ForceMode2D.Impulse);
+            _animator.SetTrigger("jump");
         }
     }
 
     private void Motion()
     {
-        inputHorizontal = Input.GetAxis("Horizontal");
-        rb.linearVelocity = new Vector2(inputHorizontal * velocidadMovimiento, rb.linearVelocity.y);
-        if (inputHorizontal != 0)
+        _inputHorizontal = Input.GetAxis("Horizontal");
+        _rb.linearVelocity = new Vector2(_inputHorizontal * velocidadMovimiento, _rb.linearVelocity.y);
+        if (_inputHorizontal != 0)
         {
-            animator.SetBool("running", true);
-            if (inputHorizontal > 0)
+            _animator.SetBool("running", true);
+            if (_inputHorizontal > 0)
             {
                 transform.eulerAngles = Vector3.zero;
             }
@@ -53,7 +66,22 @@ public class Player : MonoBehaviour
         }
         else
         {
-            animator.SetBool("running", false);
+            _animator.SetBool("running", false);
         }
+    }
+
+    private void AttackHandler()
+    {
+        Collider2D[] otherActors = Physics2D.OverlapCircleAll(attackPoint.position, attackRadio, damageLayer);
+        foreach (Collider2D other in otherActors)
+        {
+            LifeSystem lifeSystem = other.gameObject.GetComponent<LifeSystem>();
+            lifeSystem.GetDamage(damage);
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere(attackPoint.position, attackRadio);
     }
 }

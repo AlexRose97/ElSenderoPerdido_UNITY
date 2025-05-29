@@ -36,16 +36,4 @@ public class FSM_Controller : MonoBehaviour
         _currentState = newState;
         _currentState.OnEnterState(this);
     }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("PlayerCollision"))
-        {
-            Debug.Log("TODO: Daño Colision");
-        }else if (other.gameObject.CompareTag("PlayerDetection"))
-        {
-            Debug.Log("TODO: Player en area");
-            
-        }
-    }
 }
