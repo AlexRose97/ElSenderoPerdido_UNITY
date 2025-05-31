@@ -5862,6 +5862,7 @@ MonoBehaviour:
   isMeleeEnemy: 0
   meleeRange: 1.5
   rangedRange: 5
+  canAttackBehind: 0
 --- !u!70 &1309132634
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -5992,7 +5993,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackInterval: 1
-  canAttackBehind: 0
   fireballPrefab: {fileID: 2137372030809418836, guid: 8acbe56b7958bb74aabd9d3445e2d4eb, type: 3}
   firePoint: {fileID: 1433293489}
 --- !u!1 &1317121186
@@ -6603,6 +6603,7 @@ MonoBehaviour:
   isMeleeEnemy: 1
   meleeRange: 3
   rangedRange: 5
+  canAttackBehind: 0
 --- !u!114 &1756598282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6643,7 +6644,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackInterval: 1.5
-  canAttackBehind: 0
 --- !u!58 &1756598285
 CircleCollider2D:
   m_ObjectHideFlags: 0
