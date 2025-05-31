@@ -14,6 +14,7 @@ namespace StateMachine
         [SerializeField] private bool isMeleeEnemy = true;
         [SerializeField] private float meleeRange = 1.5f;
         [SerializeField] private float rangedRange = 5f;
+        [SerializeField] private bool canAttackBehind = true;
         private State _currentState;
         private AttackState _meleeAttackState;
         private RangedAttackState _rangedAttackState;
@@ -39,30 +40,8 @@ namespace StateMachine
         private void Update()
         {
             if (_currentState == null) return;
-
             _currentState.OnUpdateState();
-
-            if (Target == null || _currentState is PatrolState) return;
-
-            float distanceToPlayer = Mathf.Abs(Target.position.x - transform.position.x);
-            bool inMeleeRange = isMeleeEnemy && distanceToPlayer <= meleeRange;
-            bool inRangedRange = isRangedEnemy && distanceToPlayer <= rangedRange;
-
-            Debug.LogWarning($"[FSM] inMeleeRange: {inMeleeRange}, inRangedRange: {inRangedRange}, State: {_currentState.GetType().Name}");
-
-            // 1. Si estoy en persecución y entro en rango → cambiar a ataque
-            if (_currentState is ChaseState && (inMeleeRange || inRangedRange))
-            {
-                EvaluateCombatState();
-            }
-
-            // 2. Si estoy en ataque y me alejé → volver a perseguir
-            else if (
-                (_currentState is AttackState && !inMeleeRange) ||
-                (_currentState is RangedAttackState && !inRangedRange))
-            {
-                EvaluateCombatState();
-            }
+            EvaluateCombatState();
         }
 
 
@@ -93,6 +72,15 @@ namespace StateMachine
                 return;
             }
 
+            bool isInFront = IsPlayerInFront();
+            if (!canAttackBehind && !isInFront)
+            {
+                //return;
+                //Si el enemigo esta de espaldas y no tiene permitido girar hacia el jugador
+                ChangeState(_patrolState);
+                return;
+            }
+
             // Calculamos la distancia horizontal al jugador
             float distanceToPlayer = Mathf.Abs(Target.position.x - transform.position.x);
 
@@ -105,13 +93,11 @@ namespace StateMachine
             {
                 if (inMeleeRange)
                 {
-                    Debug.Log("meleAttackHIBRID"+ " inMeleeRange:"+inMeleeRange+" inRangedRange:"+inRangedRange);
                     ChangeState(_meleeAttackState); // Ataca cuerpo a cuerpo
                     return;
                 }
                 else if (inRangedRange)
                 {
-                    Debug.Log("rangedAttackHIBRID"+ " inMeleeRange:"+inMeleeRange+" inRangedRange:"+inRangedRange);
                     ChangeState(_rangedAttackState); // Ataca a distancia
                     return;
                 }
@@ -119,14 +105,12 @@ namespace StateMachine
             // Solo puede atacar cuerpo a cuerpo
             else if (isMeleeEnemy && inMeleeRange)
             {
-                Debug.Log("meleAttack"+ " inMeleeRange:"+inMeleeRange+" inRangedRange:"+inRangedRange);
                 ChangeState(_meleeAttackState);
                 return;
             }
             // Solo puede atacar a distancia
             else if (isRangedEnemy && inRangedRange)
             {
-                Debug.Log("rangedAttack"+ " inMeleeRange:"+inMeleeRange+" inRangedRange:"+inRangedRange);
                 ChangeState(_rangedAttackState);
                 return;
             }
@@ -134,15 +118,28 @@ namespace StateMachine
             // Si no puede atacar pero puede perseguir, lo hace
             if (canChase)
             {
-                Debug.Log("Chase"+ " inMeleeRange:"+inMeleeRange+" inRangedRange:"+inRangedRange);
                 ChangeState(_chaseState);
             }
             else
             {
-                Debug.Log("patrol"+ " inMeleeRange:"+inMeleeRange+" inRangedRange:"+inRangedRange);
                 // No puede atacar ni perseguir: regresa a patrullar
                 ChangeState(_patrolState);
             }
+        }
+
+        /// <summary>
+        /// Determina si el jugador está frente al enemigo,
+        /// según la rotación en Y (0 = derecha, 180 = izquierda).
+        /// </summary>
+        private bool IsPlayerInFront()
+        {
+            if (Target == null) return false;
+
+            float deltaX = Target.position.x - transform.position.x;
+            bool facingLeft = Mathf.Approximately(transform.eulerAngles.y, 180);
+
+            // Si mira a la izquierda, el jugador debe estar a la izquierda
+            return facingLeft ? deltaX < 0 : deltaX > 0;
         }
     }
 }
