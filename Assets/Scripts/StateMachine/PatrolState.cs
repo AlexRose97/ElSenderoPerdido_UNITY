@@ -7,14 +7,14 @@ namespace StateMachine
     {
         [SerializeField] private float speed;
         [SerializeField] private Transform route;
-        [SerializeField] private bool followXOnly = true;
         private List<Transform> _waypoints = new();
         private Transform _currentWaypoint;
         private int _currentWaypointIndex = 0;
 
-        public override void OnEnterState(FSM_Controller controller)
+        public override void OnEnterState(FsmController controller)
         {
             base.OnEnterState(controller);
+            _animator.SetBool("patrol", true);
             foreach (Transform point in route)
             {
                 _waypoints.Add(point);
@@ -27,7 +27,7 @@ namespace StateMachine
         {
             Vector3 targetPosition;
 
-            if (followXOnly)
+            if (_controller.FollowXOnly)
             {
                 // Mantiene la posición Y actual del enemigo
                 targetPosition = new Vector3(_currentWaypoint.position.x, transform.position.y, transform.position.z);
@@ -38,7 +38,7 @@ namespace StateMachine
                 targetPosition = new Vector3(_currentWaypoint.position.x, _currentWaypoint.position.y,
                     transform.position.z);
             }
-            
+
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * speed);
             //Animation Direction
             transform.eulerAngles = transform.position.x >= _currentWaypoint.position.x
@@ -60,6 +60,7 @@ namespace StateMachine
         public override void OnExitState()
         {
             _waypoints.Clear();
+            _animator.SetBool("patrol", false);
         }
     }
 }
