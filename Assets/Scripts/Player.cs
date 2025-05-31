@@ -3,8 +3,13 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float velocidadMovimiento;
+    [Header("MovementSystem")] [SerializeField]
+    private float velocidadMovimiento;
+
     [SerializeField] private float fuerzaSalto;
+    [SerializeField] private LayerMask jumpingLayer;
+    [SerializeField] private Transform jumpingPoint;
+    [SerializeField] private float jumpingRadio;
 
     [Header("CombatSystem")] [SerializeField]
     private Transform attackPoint;
@@ -31,6 +36,7 @@ public class Player : MonoBehaviour
         Jump();
         Attack();
     }
+
     private void Attack()
     {
         if (Input.GetMouseButtonDown(0))
@@ -41,7 +47,7 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && JumpHandler())
         {
             _rb.AddForce(Vector2.up * fuerzaSalto, ForceMode2D.Impulse);
             _animator.SetTrigger("jump");
@@ -80,8 +86,14 @@ public class Player : MonoBehaviour
         }
     }
 
+    private bool JumpHandler()
+    {
+        return Physics2D.Raycast(jumpingPoint.position, Vector3.down, jumpingRadio, jumpingLayer);
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.DrawSphere(attackPoint.position, attackRadio);
+        Gizmos.DrawRay(jumpingPoint.position,Vector3.down);
     }
 }
