@@ -1,10 +1,10 @@
-using System;
 using StateMachine;
 using UnityEngine;
 
 public class DamageSystem : MonoBehaviour
 {
     [SerializeField] private float damage;
+    [SerializeField] private bool destroyOnCollision = false;
     private Transform _playerInRange;
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -12,7 +12,15 @@ public class DamageSystem : MonoBehaviour
         if (other.gameObject.CompareTag("PlayerCollision"))
         {
             LifeSystem lifeSystem = other.gameObject.GetComponent<LifeSystem>();
-            lifeSystem.GetDamage(damage);
+            if (lifeSystem != null)
+            {
+                lifeSystem.GetDamage(damage);
+            }
+
+            if (destroyOnCollision)
+            {
+                Destroy(gameObject);
+            }
         }
         else if (other.gameObject.CompareTag("PlayerDetection"))
         {

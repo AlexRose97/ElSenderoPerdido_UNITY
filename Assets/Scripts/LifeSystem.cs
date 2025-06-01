@@ -62,6 +62,7 @@ public class LifeSystem : MonoBehaviour
             {
                 Debug.Log($"¡Perdiste una vida! Vidas restantes: {totalLives}");
                 _currentHealth = maxHealthPerLife; // reinicia salud
+                transform.position = GameManager.Instance.GetCheckpointPosition();//regresa al checkpoint
                 //TODO: Agregar Animacion dead y tiempo invulnerable
             }
             else
