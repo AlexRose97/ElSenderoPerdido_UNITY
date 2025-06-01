@@ -9,7 +9,7 @@ public class LevelEnd : MonoBehaviour
         if (other.gameObject.CompareTag("PlayerDetection"))
         {
             GameManager.Instance.AddScore(scoreToGive);
-            GameManager.Instance.FinishLevel();
+            GameManager.Instance.FinishLevel(true);
             PauseMenuManager.Instance.ShowGameOverMenu(); // muestra UI
         }
     }

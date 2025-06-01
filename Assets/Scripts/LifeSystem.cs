@@ -89,7 +89,7 @@ public class LifeSystem : MonoBehaviour
             Debug.Log("¡Game Over!");
             if (isPlayer)
             {
-                GameManager.Instance.FinishLevel();
+                GameManager.Instance.FinishLevel(false);
                 PauseMenuManager.Instance.ShowGameOverMenu(); // muestra UI
             }
             else

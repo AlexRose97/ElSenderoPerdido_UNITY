@@ -36,11 +36,14 @@ public class GameManager : MonoBehaviour
         return _lastCheckpointPosition;
     }
 
-    public void FinishLevel()
+    public void FinishLevel(bool isWin)
     {
         Debug.Log("Nivel completado. Puntaje: " + _currentScore);
         _isEndGame = true;
-        StartCoroutine(ShowMessage("Nivel completado!..."));
+        if (isWin)
+        {
+            StartCoroutine(ShowMessage("Nivel completado!..."));
+        }
         // Guardar datos, pasar al siguiente nivel, etc.
     }
 
