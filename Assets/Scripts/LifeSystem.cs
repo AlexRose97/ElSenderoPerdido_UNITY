@@ -1,7 +1,8 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
+using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class LifeSystem : MonoBehaviour
 {
@@ -19,9 +20,19 @@ public class LifeSystem : MonoBehaviour
     [Header("Altura límite de caída")] [SerializeField]
     private float fallLimitY = -20f;
 
+    [Header("UI Elements")] [SerializeField]
+    private TextMeshProUGUI textLife;
+
+    [SerializeField] private TextMeshProUGUI textPoints;
+    [SerializeField] private Slider sliderLife;
+    [SerializeField] private GameObject heartPrefab;
+    [SerializeField] private Transform heartContainer;
+    private List<GameObject> _hearts = new List<GameObject>();
+
     private void Start()
     {
         _currentHealth = maxHealthPerLife;
+        this.UpdateHud();
     }
 
     private void Update()
@@ -31,11 +42,8 @@ public class LifeSystem : MonoBehaviour
         {
             if (isPlayer)
             {
-                // checkpoints
-                if (GameManager.Instance != null)
-                    transform.position = GameManager.Instance.GetCheckpointPosition();
-                else
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().name); // reinicia
+                this.SubtractLives();
+                this.UpdateHud();
             }
             else
             {
@@ -49,7 +57,7 @@ public class LifeSystem : MonoBehaviour
         _currentHealth -= damage;
         Debug.Log(floatingTextPoint.position);
         Debug.Log($"Daño recibido: {damage}. Salud restante: {_currentHealth}");
-        GameObject instance = Instantiate(floatingTextPrefab,floatingTextPoint.position,
+        GameObject instance = Instantiate(floatingTextPrefab, floatingTextPoint.position,
             Quaternion.identity);
         TextMeshPro floatingText = instance.GetComponent<TextMeshPro>();
         floatingText.color = isPlayer ? Color.red : Color.white;
@@ -57,22 +65,60 @@ public class LifeSystem : MonoBehaviour
         Destroy(instance, 1.1f);
         if (_currentHealth <= 0)
         {
-            totalLives--;
-            if (totalLives > 0)
+            SubtractLives();
+        }
+
+        this.UpdateHud();
+    }
+
+    private void SubtractLives()
+    {
+        totalLives--;
+        if (totalLives > 0)
+        {
+            Debug.Log($"¡Perdiste una vida! Vidas restantes: {totalLives}");
+            _currentHealth = maxHealthPerLife; // reinicia salud
+            if (GameManager.Instance != null)
             {
-                Debug.Log($"¡Perdiste una vida! Vidas restantes: {totalLives}");
-                _currentHealth = maxHealthPerLife; // reinicia salud
-                transform.position = GameManager.Instance.GetCheckpointPosition();//regresa al checkpoint
-                //TODO: Agregar Animacion dead y tiempo invulnerable
+                transform.position = GameManager.Instance.GetCheckpointPosition(); //regresa al checkpoint
+            }
+            //TODO: Agregar Animacion dead y tiempo invulnerable
+        }
+        else
+        {
+            Debug.Log("¡Game Over!");
+            if (isPlayer)
+            {
+                GameManager.Instance.FinishLevel();
+                PauseMenuManager.Instance.ShowGameOverMenu(); // muestra UI
             }
             else
-            {
-                Debug.Log("¡Game Over!");
-                if (isPlayer)
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().name); // reinicia nivel
-                else
-                    Destroy(gameObject);
-            }
+                Destroy(gameObject);
+        }
+    }
+
+    private void UpdateHud()
+    {
+        if (isPlayer)
+        {
+            sliderLife.value = _currentHealth / maxHealthPerLife;
+            textLife.SetText($"{_currentHealth}/{maxHealthPerLife}");
+            this.UpdateHearts();
+        }
+    }
+
+    public void UpdateHearts()
+    {
+        // Elimina corazones anteriores
+        foreach (var heart in _hearts)
+            Destroy(heart);
+        _hearts.Clear();
+
+        // Crea nuevos corazones
+        for (int i = 1; i < totalLives; i++)
+        {
+            GameObject heart = Instantiate(heartPrefab, heartContainer);
+            _hearts.Add(heart);
         }
     }
 }
