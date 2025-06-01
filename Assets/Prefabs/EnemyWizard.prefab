@@ -42,7 +42,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7844408471702023976}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: AttackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,7 +58,7 @@ Transform:
   m_GameObject: {fileID: 1123293438921480271}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.41, y: 0.457, z: 0}
+  m_LocalPosition: {x: 1.96, y: 0.457, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -226,7 +226,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 5
+  m_Radius: 6
 --- !u!1 &5577656739323658905
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,7 +270,8 @@ GameObject:
   - component: {fileID: 3670687695785387261}
   - component: {fileID: 8711466417023473882}
   - component: {fileID: 4472327601544754673}
-  - component: {fileID: 5461994897760476608}
+  - component: {fileID: 6377484657566215654}
+  - component: {fileID: 1738217030767889617}
   - component: {fileID: 1664533836101280731}
   - component: {fileID: 6716033773909348121}
   - component: {fileID: 4234302554503679621}
@@ -392,14 +393,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   followXOnly: 1
-  canPatrol: 1
-  canChase: 1
   isRangedEnemy: 1
-  isMeleeEnemy: 0
-  meleeRange: 1.5
-  rangedRange: 5
+  isMeleeEnemy: 1
+  meleeRange: 2.5
+  rangedRange: 6
+  canChase: 1
   canAttackBehind: 0
---- !u!114 &5461994897760476608
+  damageLayer:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!114 &6377484657566215654
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -414,6 +417,21 @@ MonoBehaviour:
   attackInterval: 1
   fireballPrefab: {fileID: 2137372030809418836, guid: 8acbe56b7958bb74aabd9d3445e2d4eb, type: 3}
   firePoint: {fileID: 7844408471702023976}
+--- !u!114 &1738217030767889617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8347651150028577941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e15ec46ce0140242a0ba1be44c64a16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackInterval: 1
+  attackPoint: {fileID: 7844408471702023976}
+  attackRadio: 1
 --- !u!114 &1664533836101280731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -472,6 +490,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 20
+  destroyOnCollision: 0
 --- !u!50 &2989974978977786218
 Rigidbody2D:
   serializedVersion: 5

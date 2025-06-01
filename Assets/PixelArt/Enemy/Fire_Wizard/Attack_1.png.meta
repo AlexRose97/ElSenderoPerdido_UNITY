@@ -131,9 +131,9 @@ TextureImporter:
         x: 30
         y: 0
         width: 44
-        height: 59
+        height: 70
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -153,9 +153,9 @@ TextureImporter:
         x: 163
         y: 0
         width: 39
-        height: 59
+        height: 70
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -174,10 +174,10 @@ TextureImporter:
         serializedVersion: 2
         x: 295
         y: 0
-        width: 53
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 75
+        height: 70
+      alignment: 9
+      pivot: {x: 0.29333332, y: 0.49999997}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -191,37 +191,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Attack_1_3
-      rect:
-        serializedVersion: 2
-        x: 343
-        y: 17
-        width: 27
-        height: 35
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6a0a708e5eb201140800000000000000
-      internalID: 4688295478533005478
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Attack_1_4
       rect:
         serializedVersion: 2
         x: 423
         y: 0
         width: 50
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        height: 70
+      alignment: 9
+      pivot: {x: 0.44, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -238,7 +216,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: a4dbc806e8f07104cbb0e56824401333
     internalID: 0
     vertices: []
     indices: 

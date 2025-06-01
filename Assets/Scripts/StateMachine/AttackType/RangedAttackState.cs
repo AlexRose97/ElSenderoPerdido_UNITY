@@ -1,8 +1,8 @@
 using UnityEngine;
 
-namespace StateMachine
+namespace StateMachine.AttackType
 {
-    public class RangedAttackState : AttackState
+    public class RangedAttackState : AttackBase
     {
         [SerializeField] private GameObject fireballPrefab;
         [SerializeField] private Transform firePoint;
@@ -10,12 +10,12 @@ namespace StateMachine
         {
             if ((Time.time - LastAttackTime >= attackInterval) && this.TryAttackPlayerDirection())
             {
-                _animator.SetTrigger("attack1");
+                _animator.SetTrigger("ranged_attack");
                 LastAttackTime = Time.time;
             }
         }
 
-        private void SpawnAmmo()
+        private void RangedAttackHandler()
         {
             Instantiate(fireballPrefab, firePoint.position, transform.rotation);
         }

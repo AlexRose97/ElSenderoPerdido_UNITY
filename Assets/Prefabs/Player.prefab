@@ -288,7 +288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81d3d52dd382a474482cd574fc9c6704, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealthPerLife: 100
+  maxHealthPerLife: 200
   floatingTextPrefab: {fileID: 5407018702343637832, guid: 5a1f5582062fe0b4c9c49e17aa0b5f42, type: 3}
   floatingTextPoint: {fileID: 1650336361934274550}
   totalLives: 3

@@ -9,20 +9,7 @@ public class DamageSystem : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("PlayerCollision"))
-        {
-            LifeSystem lifeSystem = other.gameObject.GetComponent<LifeSystem>();
-            if (lifeSystem != null)
-            {
-                lifeSystem.GetDamage(damage);
-            }
-
-            if (destroyOnCollision)
-            {
-                Destroy(gameObject);
-            }
-        }
-        else if (other.gameObject.CompareTag("PlayerDetection"))
+        if (!DamagePlayer(other) && other.gameObject.CompareTag("PlayerDetection"))
         {
             _playerInRange = other.transform;
             FsmController fsm = GetComponentInParent<FsmController>();
@@ -45,5 +32,26 @@ public class DamageSystem : MonoBehaviour
                 fsm.EvaluateCombatState(); // FSM decide que accion realizar
             }
         }
+    }
+
+    public bool DamagePlayer(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("PlayerCollision"))
+        {
+            LifeSystem lifeSystem = other.gameObject.GetComponent<LifeSystem>();
+            if (lifeSystem != null)
+            {
+                lifeSystem.GetDamage(damage);
+            }
+
+            if (destroyOnCollision)
+            {
+                Destroy(gameObject);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

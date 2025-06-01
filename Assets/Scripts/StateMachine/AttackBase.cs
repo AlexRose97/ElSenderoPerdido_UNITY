@@ -2,12 +2,10 @@ using UnityEngine;
 
 namespace StateMachine
 {
-    public class AttackState : State
+    public class AttackBase : State
     {
         protected float LastAttackTime;
         [SerializeField] protected float attackInterval = 3f; // Tiempo entre ataques
-        
-
         public override void OnEnterState(FsmController controller)
         {
             base.OnEnterState(controller);
@@ -16,13 +14,7 @@ namespace StateMachine
 
         public override void OnUpdateState()
         {
-            if ((Time.time - LastAttackTime >= attackInterval) && this.TryAttackPlayerDirection())
-            {
-                _animator.SetTrigger("attack1");
-                LastAttackTime = Time.time;
-            }
         }
-
         public override void OnExitState()
         {
         }
